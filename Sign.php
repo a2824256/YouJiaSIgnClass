@@ -12,7 +12,7 @@ class Sign
     private static function publicKeyFormat($pubKey)
     {
         $pubKey = preg_replace("/\s/", "", $pubKey);
-        $pubKey = chunk_split($pubKey, 64, "\n");
+        $pubKey = chunk_split($pubKey, 64, PHP_EOL);
         $pubKey = "-----BEGIN PUBLIC KEY-----\n$pubKey-----END PUBLIC KEY-----\n";
         return $pubKey;
     }
@@ -20,7 +20,7 @@ class Sign
     private static function privateKeyFormat($priKey)
     {
         $priKey = preg_replace("/\s/", "", $priKey);
-        $priKey = chunk_split($priKey, 64, "\n");
+        $priKey = chunk_split($priKey, 64, PHP_EOL);
         $priKey = "-----BEGIN RSA PRIVATE KEY-----\n$priKey-----END RSA PRIVATE KEY-----\n";
         return $priKey;
     }
