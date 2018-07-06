@@ -150,11 +150,11 @@ class Sign
     public static function sign($json)
     {
         $jsonArr = [];
-        //反步骤5
+        //生成随机AES密钥
         $aeskey = self::randomAESKey($json);
-        //步骤4
+        //加密数据
         $encryptData = self::encrypt($json, $aeskey, $aeskey);
-        //步骤3
+        //生成签名
         $signStr = self::generateSign($encryptData);
         if (!$signStr) {
             return [];
@@ -162,35 +162,36 @@ class Sign
         $signStr = chunk_split($signStr, 76, PHP_EOL);
         $jsonArr["sign"] = $signStr;
         $jsonArr["data"] = $encryptData;
-        //CODE
+        //加密AES密钥
         $code = self::publicEncrypt($aeskey);
         if (!$code) {
             return [];
         }
         $code = chunk_split($code, 76, PHP_EOL);
         $jsonArr["code"] = $code;
+        //返回json格式结果
         return json_encode($jsonArr);
     }
 
     //验证签名
     public static function unsign($json)
     {
+        //json字符串转json数组
         $jsonArr = json_decode($json, true);
         $sd = $jsonArr["data"];
         $sign = $jsonArr["sign"];
-        //步骤2
+        //检查签名
         $checkSign = self::checkSign($sd, $sign);
         if (!$checkSign) {
             return false;
         }
         $code = $jsonArr["code"];
-        //步骤3
+        //获取AES密钥
         self::$aesKey = self::getAseKey($code);
-        //步骤4
+        //获得json原数据
         $reqDateStr = self::decrypt($sd, self::$aesKey, self::$aesKey);
-        //步骤5
+        //验证AES密钥
         $reqDateStr = self::randomAESKey($reqDateStr);
-
         if ($reqDateStr == self::$aesKey) {
             return true;
         }
@@ -198,6 +199,7 @@ class Sign
     }
 }
 
+//加密测试
 $json = "{\"business_code\":\"000055\",\"coupen_code\":\"838431010058\",\"customer_no\":\"dgcb\",\"ext\":\"{\\\"money\\\":50000,\\\"tel\\\":\\\"18898800001\\\"}\",\"num\":\"1\",\"order_no\":\"MALL1707201004059622\",\"req_time\":\"2017-07-20 10:05:52\",\"suplier_product_no\":\"provider002\",\"url\":\"http://v2test.ujia007.com/rpc/callback/platform/dgcb/000055\",\"web_url\":\"\"}";
 Sign::setKeyPath(dirname(__FILE__)."/public.key.base64",dirname(__FILE__)."/private.key.base64");
 $res = Sign::sign($json);
