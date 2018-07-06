@@ -147,7 +147,7 @@ class Sign
     }
 
     //加密请求
-    public static function encryptReq($json)
+    public static function sign($json)
     {
         $jsonArr = [];
         //反步骤5
@@ -173,7 +173,7 @@ class Sign
     }
 
     //验证签名
-    public static function validateSign($json)
+    public static function unsign($json)
     {
         $jsonArr = json_decode($json, true);
         $sd = $jsonArr["data"];
@@ -199,6 +199,6 @@ class Sign
 }
 
 $json = "{\"business_code\":\"000055\",\"coupen_code\":\"838431010058\",\"customer_no\":\"dgcb\",\"ext\":\"{\\\"money\\\":50000,\\\"tel\\\":\\\"18898800001\\\"}\",\"num\":\"1\",\"order_no\":\"MALL1707201004059622\",\"req_time\":\"2017-07-20 10:05:52\",\"suplier_product_no\":\"provider002\",\"url\":\"http://v2test.ujia007.com/rpc/callback/platform/dgcb/000055\",\"web_url\":\"\"}";
-Tool::setKeyPath(dirname(__FILE__)."/public.key.base64",dirname(__FILE__)."/private.key.base64");
-$res = Tool::encryptReq($json);
+Sign::setKeyPath(dirname(__FILE__)."/public.key.base64",dirname(__FILE__)."/private.key.base64");
+$res = Sign::sign($json);
 var_dump($res);
