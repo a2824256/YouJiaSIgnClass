@@ -2,9 +2,9 @@
 
 class Sign
 {
-    //自己公钥
+    //公钥卢金
     private static $publicKeyPath = "";
-    //自己私钥
+    //私钥路径
     private static $privateKeyPath = "";
     private static $aesKey;
 
