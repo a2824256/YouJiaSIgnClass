@@ -2,7 +2,7 @@
 
 class Sign
 {
-    //公钥卢金
+    //公钥路径
     private static $publicKeyPath = "";
     //私钥路径
     private static $privateKeyPath = "";
